@@ -1,0 +1,7 @@
+coverage
+django==2.0.2
+djangorestframework==3.8.2
+ipdb
+isort
+psycopg2-binary
+pycodestyle

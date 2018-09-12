@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:latest
+    ports:
+      - ${EXT_POSTGRES_PORT}:${POSTGRES_PORT}
+    env_file:
+      - ${PWD-.}/.env
+  web:
+    build:
+      context: ${PWD-.}
+      dockerfile: Dockerfile
+    command: python3 manage.py runserver 0.0.0.0:${DJANGO_PORT}
+    volumes:
+      - ${PWD-.}/src/api:/srv/api
+    ports:
+      - ${EXT_DJANGO_PORT}:${DJANGO_PORT}
+    env_file:
+      - ${PWD-.}/.env
+    depends_on:
+      - db
