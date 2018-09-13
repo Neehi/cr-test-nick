@@ -130,7 +130,7 @@ Details on individual settings for Django and relevant third-party modules can b
 
 *Note: details of individual Django settings are beyond the scope of this guide.*
 
-## Create/Populate the Database
+### Create/Populate the Database
 Before actually using the website you will need to run the migrations to build the application tables, which you will need to do from the Docker container.
 First run a shell on the container:
 ```
@@ -150,6 +150,41 @@ $ python manage.py createsuperuser
 *You will be prompted to enter name, email and password of your super user.*
 
 Once completed you will need to restart the docker container.
+
+### Testing the Backend API
+The backend comes with its own suite of unit tests.
+
+In order to run any of the unit tests, you'll need to run a shall on the container.
+
+The simplest way to run the tests is to use the provided python script:
+```
+$ ./run_tests.py
+```
+This will run the unit tests and by default run the pycodestyle linter and isort. There are several options available with the script, which can be seen by running `./run_tests.py --help`.
+
+Optionally you can run the tests using the Django test runner directly.
+```
+$ ./manage.py tests testapp
+```
+
+#### Test Coverage
+Coverage has been installed on the container so the overall test coverage can be checked.
+
+The simplest way to get the coverage report is to run it with the provided test script:
+```
+$ coverage run run_tests.py
+```
+
+Optionally coverage can also be obtained using the Django test runner directly, by running `coverage run manage.py test tests`.
+
+Once the tests have been completed, the most convenient way of viewing the coverage report is to generate an HTML version of the coverage report, which can be done as follows:
+```
+$ coverage html
+```
+
+You can then view the report in your browser my navigating to the path where you have the repo installed and opening `/path/to/repo/src/api/html/index.html`.
+
+_Note: The `tests` and `migrations` folders are left out of the coverage report as they are not covered by the unit tests. I have also omitted `config` from the coverage report as testing the config settings is beyond the scope of these tests._
 
 ## Accessing the Project Websites
 |Description|Server/IP|
