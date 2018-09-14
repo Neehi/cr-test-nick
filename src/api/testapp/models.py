@@ -1,6 +1,27 @@
 from django.core import validators
 from django.db import models
+from django.db.models import Count
+from django.db.models.functions import Lower
 from django.utils.translation import ugettext_lazy as _
+
+
+class WordQuerySet(models.QuerySet):
+    def unique(self):
+        """
+        Return a list of case insensitive unique words.
+
+        An alternate method is to force the word to lowercase on the save
+        method, but there's always the chance the save can be bypassed, so
+        this acts as a more convenient (though less efficient) coverall.
+        """
+        return (
+            self.extra(select={'value': "LOWER(value)"})
+                .values('value')
+                .distinct()
+        )
+
+    def unique_with_counts(self):
+        return self.unique().annotate(num_occurrences=Count('id'))
 
 
 class Word(models.Model):
@@ -42,6 +63,8 @@ class Word(models.Model):
             ),
         ],
     )
+
+    objects = WordQuerySet().as_manager()
 
     class Meta:
         ordering = ['value', ]
