@@ -1,3 +1,5 @@
+import json
+
 from collections import OrderedDict
 
 from django.test import TestCase
@@ -19,13 +21,6 @@ class UniqueWordListTests(TestCase):
 
     def test_view_invalid_methods(self):
         # Only GET should be supported
-        request = factory.post('/', {}, content_type='application/json')
-        response = self.view(request)
-        self.assertEqual(response.status_code, 405)
-        self.assertEqual(
-            response.data,
-            {'detail': ErrorDetail(string='Method "POST" not allowed.', code='method_not_allowed')}
-        )
         request = factory.put('/', {}, content_type='application/json')
         response = self.view(request)
         self.assertEqual(response.status_code, 405)
@@ -63,3 +58,11 @@ class UniqueWordListTests(TestCase):
             response.data,
             [OrderedDict([('value', "test"), ('num_occurrences', 1)])]
         )
+
+    def test_view_post(self):
+        data = {'sentence': "This is a test sentence."}
+        request = factory.post('/', json.dumps(data), content_type='application/json')
+        response = self.view(request)
+        self.assertEqual(response.status_code, 200)
+        response.render()  # Need to render before accessing
+        self.assertEqual(response.content, b'')  # Response should be empty
