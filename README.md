@@ -9,7 +9,11 @@ Produce a web application with a backend API that will take a sentence, splits i
 ## Requirements
 In order to run the test app you will require the following:
 
+**Backend**
 * Docker and Docker Compose for installing and running the backend server, as the entire setup and installation assumes the project is being run from Docker. If Docker is not already installed on your system, it can be downloaded from docker.com and installation instruction can be found here.
+
+**Frontend**
+* Node.js; installers available from [nodejs.org](https://nodejs.org/en/) (LTS Version)
 
 ## Getting Started
 The source for the test app can be found [here](https://github.com/onetouchapps/cr-test-nick) on Github.
@@ -182,9 +186,36 @@ Once the tests have been completed, the most convenient way of viewing the cover
 $ coverage html
 ```
 
-You can then view the report in your browser my navigating to the path where you have the repo installed and opening `/path/to/repo/src/api/html/index.html`.
+You can then view the report in your browser my navigating to the path where you have the repo installed and opening `/path/to/repo/src/api/htmlcov/index.html`.
 
 _Note: The `tests` and `migrations` folders are left out of the coverage report as they are not covered by the unit tests. I have also omitted `config` from the coverage report as testing the config settings is beyond the scope of these tests._
+
+## Build and Launch the Frontend Application
+
+Before building and launching the Angular frontend, you'll need to make sure you're within the client directory: `/path/to/repo/src/client`.
+
+### Install Dependencies
+In your client directory, run `npm install`. You only need to do this once to run the project initially, but it also needs to be run whenever the list of dependencies (in package.json) changes.
+
+To check package.json for required versions of dependencies, run `npm list`.
+
+### Start Development Server
+Run `npm start`. This will start the Angular development server on [http://localhost:4200/](http://localhost:4200/).
+
+If you need to get the backend up and running, please refer to the section on building and launching the backend further back in this readme.
+
+### Running unit tests
+
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+You can also use `npm test`.
+
+### Running end-to-end tests
+
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Before running the tests make sure you are serving the app via `ng serve`.
+
+You can also use `npm run e2e`.
 
 ## Accessing the Project Websites
 |Description|Server/IP|
