@@ -6,7 +6,8 @@
     "start": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.js --source-map",
     "build": "ng build",
     "test": "ng test",
-    "lint": "ng lint",
+    "sass-lint": "node ./node_modules/sass-lint/bin/sass-lint.js -c ./sass-lint.yml -v -q",
+    "lint": "echo Running sass-lint... && npm run sass-lint && echo Running tslint... && ng lint --type-check",
     "e2e": "ng e2e"
   },
   "private": true,
@@ -41,6 +42,7 @@
     "karma-jasmine": "~1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.4.0",
+    "sass-lint": "^1.12.1",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
     "typescript": "~2.9.2"

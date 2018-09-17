@@ -217,6 +217,10 @@ Before running the tests make sure you are serving the app via `ng serve`.
 
 You can also use `npm run e2e`.
 
+### Linting
+
+`tslint` and `sass-lint` are both available via `ng lint` and `npm run sass-lint` commands respectively (or `npm run lint` to run both). You should run these before committing changes to make sure code style guidelines are met.
+
 ## Accessing the Project Websites
 |Description|Server/IP|
 |---|---|
