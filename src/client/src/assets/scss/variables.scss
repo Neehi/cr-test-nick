@@ -1,0 +1,13 @@
+// See node_modules/spectre.css/src/_variables.scss
+// or https://github.com/picturepan2/spectre/blob/master/src/_variables.scss
+// for a full list of overridable variables
+
+// Core colors
+$primary-color: #00c8e1;
+$secondary-color: lighten($primary-color, 50%);
+
+// Fonts
+$base-font-family: 'Open Sans';
+
+// Import Spectre's variables
+@import '~spectre.css/src/_variables';

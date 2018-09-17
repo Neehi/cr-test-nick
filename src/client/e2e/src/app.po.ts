@@ -5,7 +5,15 @@ export class AppPage {
     return browser.get('/');
   }
 
-  getParagraphText() {
-    return element(by.css('app-root p')).getText();
+  // getParapgraphText() {
+  //   return element(by.css('app-root p')).getText();
+  // }
+
+  getText(selector: string) {
+    return element(by.css(selector)).getText();
+  }
+
+  getImageSrc(selector: string) {
+    return element(by.css(selector)).getAttribute('src');
   }
 }

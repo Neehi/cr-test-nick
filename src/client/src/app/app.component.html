@@ -1,1 +1,23 @@
-<p>Hello world!</p>
+<header class="navbar">
+  <section class="navbar-section">
+    <a routerLink="/" class="navbar-brand mr-2">
+      <img src="/assets/ClearReview-Logo-300px.png" alt="Clear Review" id="logo">
+    </a>
+  </section>
+  <section class="navbar-section">
+  </section>
+</header>
+
+<div class="wrap">
+  <main class="container">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="bg-gray">
+    <div class="columns">
+      <div class="column col-12 text-center">
+        <p>Clear Review Technical Test by Nick Snape</p>
+      </div>
+    </div>
+  </footer>
+</div>
