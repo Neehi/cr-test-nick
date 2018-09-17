@@ -1,6 +1,8 @@
 **/htmlcov
 **/public/static
 **/__pycache__
+/dist
+/node_modules
 .coverage
 .DS_Store
 .env
