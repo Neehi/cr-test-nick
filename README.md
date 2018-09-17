@@ -200,7 +200,7 @@ In your client directory, run `npm install`. You only need to do this once to ru
 To check package.json for required versions of dependencies, run `npm list`.
 
 ### Start Development Server
-Run `npm start`. This will start the Angular development server on [http://localhost:4200/](http://localhost:4200/).
+Run `npm start`. This will start the Angular development server on [http://localhost:4200/](http://localhost:4200/). Assuming the backend is already running with its default Docker configuration, the frontend will automatically proxy API and CP requests to it.
 
 If you need to get the backend up and running, please refer to the section on building and launching the backend further back in this readme.
 
@@ -221,5 +221,5 @@ You can also use `npm run e2e`.
 |Description|Server/IP|
 |---|---|
 |Frontend|localhost:4200|
-|Backend: API|localhost:8000/api|
-|Backend: Admin Panel|localhost:8000/CP|
+|Backend: API|localhost:4200/api or localhost:8000/api|
+|Backend: Admin Panel|localhost:4200/CP or localhost:8000/CP|
