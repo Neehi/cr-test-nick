@@ -29,9 +29,7 @@ export class UniqueWordsService extends AbstractService {
   fetch() {
     this.get(this.url)
       .subscribe(data => {
-        console.log(data);
         this.uniqueWordSubject.next(this.deserialise(data));
-        console.log(this.uniqueWords$);
       });
   }
 

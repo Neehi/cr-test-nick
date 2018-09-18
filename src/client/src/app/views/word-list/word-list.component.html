@@ -6,8 +6,10 @@
     <p class="empty-title h3">There are no words here yet :(</p>
   </div>
 
-  <app-word-component
-    *ngFor="let uniqueWord of uniqueWords$ | async"
-    [uniqueWord]="uniqueWord"
-  ></app-word-component>
+  <!-- <div *ngIf="(uniqueWords$ | async)?.length != 0"> -->
+    <app-word-component
+      *ngFor="let uniqueWord of uniqueWords$ | async"
+      [uniqueWord]="uniqueWord"
+    ></app-word-component>
+  <!-- </div> -->
 </section>
