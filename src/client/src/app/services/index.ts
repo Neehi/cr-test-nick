@@ -1,1 +1,1 @@
-export * from './unique-word.service';
+export * from './unique-words.service';

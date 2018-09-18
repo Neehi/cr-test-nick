@@ -13,12 +13,12 @@ const API_URL = '/api/unique-words/';
 export class UniqueWordsService extends AbstractService {
   uniqueWords$: Observable<UniqueWord[]>;
 
-  private uniqueWordsSubject = new ReplaySubject<RawUniqueWord[]>(1);
+  private uniqueWordSubject = new ReplaySubject<UniqueWord[]>(1);
   private url = `${API_URL}`;
 
   constructor(http: HttpClient) {
     super(http);
-    this.uniqueWords$ = this.uniqueWordsSubject.asObservable();
+    this.uniqueWords$ = this.uniqueWordSubject.asObservable();
   }
 
   private deserialise(rawUniqueWords: RawUniqueWord[]): UniqueWord[] {
@@ -29,7 +29,9 @@ export class UniqueWordsService extends AbstractService {
   fetch() {
     this.get(this.url)
       .subscribe(data => {
-        this.uniqueWordsSubject.next(this.deserialise(data));
+        console.log(data);
+        this.uniqueWordSubject.next(this.deserialise(data));
+        console.log(this.uniqueWords$);
       });
   }
 

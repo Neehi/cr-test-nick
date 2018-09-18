@@ -1,0 +1,13 @@
+<section>
+  <div class="empty" *ngIf="(uniqueWords$ | async)?.length==0">
+    <div class="empty-icon">
+      <i class="icon icon-3x icon-message"></i>
+    </div>
+    <p class="empty-title h3">There are no words here yet :(</p>
+  </div>
+
+  <app-word-component
+    *ngFor="let uniqueWord of uniqueWords$ | async"
+    [uniqueWord]="uniqueWord"
+  ></app-word-component>
+</section>
