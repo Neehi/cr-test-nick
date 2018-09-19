@@ -1,15 +1,63 @@
 <section>
-  <div class="empty" *ngIf="(uniqueWords$ | async)?.length==0">
+  <div class="empty" *ngIf="!uniqueWords || uniqueWords?.length==0">
     <div class="empty-icon">
       <i class="icon icon-3x icon-message"></i>
     </div>
     <p class="empty-title h3">There are no words here yet :(</p>
   </div>
 
-  <!-- <div *ngIf="(uniqueWords$ | async)?.length != 0"> -->
+  <div *ngIf="uniqueWords?.length != 0">
+    <div class="filter-panel container">
+      <div class="columns">
+        <div class="col-8">
+          <div class="filter">
+            <form #filterForm="ngForm" (ngSubmit)="filterBy(filterTerm)">
+              <div class="input-group">
+                <input
+                  id="filter-term"
+                  [(ngModel)]="filterTerm"
+                  name="term"
+                  type="text"
+                  class="form-input input-lg"
+                  placeholder="Enter filter words..."
+                >
+                <button class="btn btn-primary btn-lg input-group-btn" type="submit">
+                  <i class="icon icon-search"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="btn-group float-right">
+            <button
+              id="sort-by-name"
+              class="btn btn-sm"
+              [ngClass]="{ 'btn-primary': sortProperty == 'value' }"
+              (click)="sortBy('value')"
+            >
+              Name
+              <i *ngIf="sortProperty == 'value' && !sortReverse" class="icon icon-arrow-up"></i>
+              <i *ngIf="sortProperty == 'value' && sortReverse" class="icon icon-arrow-down"></i>
+            </button>
+            <button
+              id="sort-by-occurrence"
+              class="btn btn-sm"
+              [ngClass]="{ 'btn-primary': sortProperty == 'num_occurrences' }"
+              (click)="sortBy('num_occurrences')"
+            >
+              Occurrence
+              <i *ngIf="sortProperty == 'num_occurrences' && !sortReverse" class="icon icon-arrow-up"></i>
+              <i *ngIf="sortProperty == 'num_occurrences' && sortReverse" class="icon icon-arrow-down"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br />
     <app-word-component
-      *ngFor="let uniqueWord of uniqueWords$ | async"
+      *ngFor="let uniqueWord of uniqueWords | orderBy:sortProperty:sortReverse"
       [uniqueWord]="uniqueWord"
     ></app-word-component>
-  <!-- </div> -->
+  </div>
 </section>

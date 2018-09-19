@@ -1,3 +1,16 @@
-<div class="word" *ngIf="uniqueWord">
-  {{ uniqueWord.value }} {{ uniqueWord.num_occurrences }}
+<div class="panel" *ngIf="uniqueWord">
+  <div class="container">
+    <div class="columns">
+      <div class="column col-10">
+        <div class="panel-header panel-title">
+          {{ uniqueWord.value }}
+        </div>
+      </div>
+      <div class="column col-2">
+        <div class="inner">
+          {{ uniqueWord.num_occurrences }}
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

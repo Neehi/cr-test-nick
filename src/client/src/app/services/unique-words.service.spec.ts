@@ -47,6 +47,26 @@ describe('UniqueWordsService', () => {
       });
   });
 
+  // TODO: Revisit?
+  // All tests pass but is giving me...
+  // `Error: Timeout - Async callback was not invoked within timeout specified by jasmine.DEFAULT_TIMEOUT_INTERVAL.`
+  describe('getWords', () => {
+    it('should get a list of words from the API', done => {
+      const data = [{value: 'test', num_occurrences: 1}];
+
+      service.getWords()
+        .subscribe(data => {
+          expect(data.length).toBe(1);
+          expect(data[0].value).toBe('test');
+          expect(data[0].num_occurrences).toBe(1);
+        });
+
+      const req = httpMock.expectOne({ method: 'GET' });
+      expect(req.request.url).toMatch('/api/unique-words/');
+      req.flush(data);
+    });
+  });
+
   it('should post a new sentence to the API', () => {
     service
       .addWords('This is a test')

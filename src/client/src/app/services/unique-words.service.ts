@@ -33,6 +33,10 @@ export class UniqueWordsService extends AbstractService {
       });
   }
 
+  getWords(): Observable<any> {
+    return this.get(this.url);
+  }
+
   // [POST] /api/unique-words/
   addWords(sentence: string): Observable<any> {
     return this.post(this.url, sentence);

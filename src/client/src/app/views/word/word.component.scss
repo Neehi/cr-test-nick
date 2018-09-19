@@ -1,0 +1,40 @@
+@import '../../../assets/scss/variables';
+
+.panel {
+  display: flex;
+  flex-wrap: nowrap;
+  border: 1px solid $border-color;
+  border-radius: 3px;
+  // padding: 1.5em 2em;
+  margin-bottom: .1em;
+
+  &:not(:last-child) {
+    border-right: 1px solid $border-color;
+  }
+
+  .panel-header {
+    position: relative;
+
+    &.panel-title {
+      font-size: 1.4em;
+    }
+  }
+
+  .column {
+    position: relative;
+
+    &:not(:first-child) {
+      border-left: 1px solid $gray-color-light;
+      font-size: .9em;
+      text-align: center;
+    }
+
+    .inner {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      left: 10px;
+      transform: translateY(-50%);
+    }
+  }
+}

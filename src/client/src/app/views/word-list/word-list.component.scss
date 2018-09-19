@@ -1,0 +1,24 @@
+@import '../../../assets/scss/variables';
+
+.filter-panel {
+    margin-bottom: 2em;
+
+    form .btn.btn-primary {
+      background-color: #e4b200;
+    }
+
+    .btn-group {
+      .btn-sm {
+        position: relative;
+        width: 125px;
+
+        .icon-arrow-up,
+        .icon-arrow-down {
+          position: absolute;
+          top: 50%;
+          right: 5px;
+          transform: translateY(-50%);
+        }
+      }
+    }
+}

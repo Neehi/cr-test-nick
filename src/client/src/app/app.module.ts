@@ -5,6 +5,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 
+import { OrderModule } from 'ngx-order-pipe';
+
 import { UniqueWordsService } from './services';
 
 import { AppComponent } from './app.component';
@@ -23,6 +25,7 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    OrderModule,
     AppRoutingModule,
   ],
   declarations: [
