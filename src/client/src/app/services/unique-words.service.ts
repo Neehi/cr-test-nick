@@ -18,6 +18,6 @@ export class UniqueWordsService extends AbstractService {
 
   // [POST] /api/unique-words/
   addWords(sentence: string): Observable<any> {
-    return this.post(this.url, sentence);
+    return this.post(this.url, {'sentence': sentence});
   }
 }

@@ -64,14 +64,14 @@ describe('UniqueWordsService', () => {
       expect(req.request.url).toMatch('/api/unique-words/');
     });
 
-    it('should post a new sentence to the API', () => {
+    it('should post a new sentence to the API in json format', () => {
       service
         .addWords('This is a test')
         .subscribe(() => {});
 
       const req = httpMock.expectOne({ method: 'POST' });
       expect(req.request.url).toMatch('/api/unique-words/');
-      expect(req.request.body).toEqual('This is a test');
+      expect(req.request.body).toEqual({'sentence': 'This is a test'});
     });
   });
 });
