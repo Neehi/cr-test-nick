@@ -22,8 +22,8 @@ export class WordListComponent implements OnInit {
   filterTerm: string;
   sentence: string;
 
-  isModalActive: boolean = false;
-  modalState: number = 0; // TODO: Use proper states
+  isModalActive = false;
+  modalState = 0; // TODO: Use proper states
 
   constructor(
     private service: UniqueWordsService,
@@ -76,15 +76,15 @@ export class WordListComponent implements OnInit {
       _uniqueWords
         .map(uniqueWord => {
           // Get an initial list of matches
-          var matches = [];
+          const matches = [];
           filterTerms.forEach(term => {
-            for (i = 0; i < uniqueWord.value.length; i++) {
-              if (uniqueWord.value.substring(i, i + term.length) == term) {
+            for (let i = 0; i < uniqueWord.value.length; i++) {
+              if (uniqueWord.value.substring(i, i + term.length) === term) {
                 matches.push({'start': i, 'end': i + term.length - 1});
               }
             }
           });
-          matches.sort((a,b) => a.start - b.start);
+          matches.sort((a, b) => a.start - b.start);
 
           // See if we have any matches
           if (matches && matches.length) {
@@ -94,15 +94,15 @@ export class WordListComponent implements OnInit {
             // - if char is not in a matched range and is currently hightlighted then close highlight tag
             let highlightedWord = '';
             let highlight = false;
-            for (var i=0; i < uniqueWord.value.length; i++) {
+            for (let i = 0; i < uniqueWord.value.length; i++) {
               // Use map reduce to check if this position should be highlighted
-              if ((matches.reduce((acc, curr) => acc + ((curr.start <= i && curr.end >= i) ? 1 : 0), 0) > 0) != highlight) {
+              if ((matches.reduce((acc, curr) => acc + ((curr.start <= i && curr.end >= i) ? 1 : 0), 0) > 0) !== highlight) {
                 highlightedWord += '<' + (highlight ? '/' : '') + 'mark>';
                 highlight = !highlight;
               }
               highlightedWord += uniqueWord.value.charAt(i);
             }
-            if (highlight) highlightedWord += '</mark>';
+            if (highlight) { highlightedWord += '</mark>'; }
             return new UniqueWord(
               highlightedWord,
               uniqueWord.num_occurrences
@@ -113,7 +113,7 @@ export class WordListComponent implements OnInit {
   }
 
   sortBy(property: string) {
-    this.sortReverse = this.sortProperty == property ? !this.sortReverse : false;
+    this.sortReverse = this.sortProperty === property ? !this.sortReverse : false;
     this.sortProperty = property;
   }
 

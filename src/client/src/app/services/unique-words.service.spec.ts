@@ -20,7 +20,7 @@ describe('UniqueWordsService', () => {
 
   afterEach(() => {
       httpMock.verify();
-  })
+  });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
@@ -40,12 +40,12 @@ describe('UniqueWordsService', () => {
       const data = [{value: 'test', num_occurrences: 1}, {value: 'AAA', num_occurrences: 2}];
 
       service.getWords()
-        .subscribe(data => {
-          expect(data.length).toBe(2);
-          expect(data[0].value).toBe('test');
-          expect(data[0].num_occurrences).toBe(1);
-          expect(data[1].value).toBe('AAA');
-          expect(data[1].num_occurrences).toBe(2);
+        .subscribe(received => {
+          expect(received.length).toBe(2);
+          expect(received[0].value).toBe('test');
+          expect(received[0].num_occurrences).toBe(1);
+          expect(received[1].value).toBe('AAA');
+          expect(received[1].num_occurrences).toBe(2);
         });
 
       const req = httpMock.expectOne({ method: 'GET' });

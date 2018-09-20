@@ -19,7 +19,7 @@ describe('Service: AbstractService', () => {
 
   afterEach(() => {
     httpMock.verify();
-  })
+  });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
@@ -44,9 +44,9 @@ describe('Service: AbstractService', () => {
     it('should return data', () => {
       const data = 'test';
 
-      service.get('/test/').subscribe(
-        data => {
-          expect(data).toEqual('test');
+      service.get('/test/')
+        .subscribe(received => {
+          expect(received).toEqual('test');
         });
 
       const req = httpMock.expectOne({ method: 'GET' });

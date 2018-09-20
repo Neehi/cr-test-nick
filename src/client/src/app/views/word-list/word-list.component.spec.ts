@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed, async, ComponentFixture } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterTestingModule } from '@angular/router/testing';
 import { FormsModule } from '@angular/forms';
 
 import { of } from 'rxjs';
@@ -87,7 +87,7 @@ describe('WordListComponent', () => {
       compiled.querySelector('.filter .btn').click();
       fixture.whenStable().then(() => {
         expect(component.filterBy).toHaveBeenCalled();
-      })
+      });
     }));
   });
 
@@ -115,8 +115,8 @@ describe('WordListComponent', () => {
       compiled.querySelector('#sort-by-value').click();
       compiled.querySelector('#sort-by-occurrence').click();
       fixture.whenStable().then(() => {
-        expect(component.sortBy).toHaveBeenCalled(); //.exactly(2).times(); // TODO: Fix?
-      })
+        expect(component.sortBy).toHaveBeenCalled(); // .exactly(2).times(); // TODO: Fix?
+      });
     }));
   });
 
@@ -306,7 +306,7 @@ describe('WordListComponent', () => {
       compiled.querySelector('.modal-overlay').click();
       fixture.whenStable().then(() => {
         expect(component.closeModal).toHaveBeenCalled();
-      })
+      });
     }));
 
     it('should call `closeModal` on button click', async(() => {
@@ -318,7 +318,7 @@ describe('WordListComponent', () => {
       compiled.querySelector('.modal-footer button.btn-link').click();
       fixture.whenStable().then(() => {
         expect(component.closeModal).toHaveBeenCalled();
-      })
+      });
     }));
 
     it('should call `addWords` on button click', async(() => {
@@ -330,7 +330,7 @@ describe('WordListComponent', () => {
       compiled.querySelector('.modal-footer button.btn-primary').click();
       fixture.whenStable().then(() => {
         expect(component.addWords).toHaveBeenCalled();
-      })
+      });
     }));
   });
 });

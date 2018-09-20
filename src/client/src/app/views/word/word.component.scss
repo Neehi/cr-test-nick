@@ -3,10 +3,9 @@
 .panel {
   display: flex;
   flex-wrap: nowrap;
+  margin-bottom: .1em;
   border: 1px solid $border-color;
   border-radius: 3px;
-  // padding: 1.5em 2em;
-  margin-bottom: .1em;
 
   &:not(:last-child) {
     border-right: 1px solid $border-color;
