@@ -6,10 +6,11 @@
     <p class="empty-title h3">There are no words here yet :(</p>
   </div>
 
-  <div *ngIf="uniqueWords?.length != 0">
+  <div *ngIf="uniqueWords && uniqueWords?.length != 0">
     <div class="filter-panel container">
       <div class="columns">
-        <div class="col-8">
+        <!-- filter terms -->
+        <div class="col-10">
           <div class="filter">
             <form #filterForm="ngForm" (ngSubmit)="filterBy(filterTerm)">
               <div class="input-group">
@@ -21,40 +22,50 @@
                   class="form-input input-lg"
                   placeholder="Enter filter words..."
                 >
-                <button class="btn btn-primary btn-lg input-group-btn" type="submit">
+                <button
+                  class="btn btn-primary btn-lg input-group-btn"
+                  type="submit"
+                >
                   <i class="icon icon-search"></i>
                 </button>
               </div>
             </form>
           </div>
         </div>
-        <div class="col-4">
-          <div class="btn-group float-right">
-            <button
-              id="sort-by-name"
-              class="btn btn-sm"
-              [ngClass]="{ 'btn-primary': sortProperty == 'value' }"
-              (click)="sortBy('value')"
-            >
-              Name
-              <i *ngIf="sortProperty == 'value' && !sortReverse" class="icon icon-arrow-up"></i>
-              <i *ngIf="sortProperty == 'value' && sortReverse" class="icon icon-arrow-down"></i>
-            </button>
-            <button
-              id="sort-by-occurrence"
-              class="btn btn-sm"
-              [ngClass]="{ 'btn-primary': sortProperty == 'num_occurrences' }"
-              (click)="sortBy('num_occurrences')"
-            >
-              Occurrence
-              <i *ngIf="sortProperty == 'num_occurrences' && !sortReverse" class="icon icon-arrow-up"></i>
-              <i *ngIf="sortProperty == 'num_occurrences' && sortReverse" class="icon icon-arrow-down"></i>
-            </button>
-          </div>
+      </div>
+    </div>
+
+    <div class="sort-panel container">
+      <div class="columns">
+        <!-- sort by word -->
+        <div class="col-10">
+          <button
+            id="sort-by-value"
+            class="btn btn-sm btn-block"
+            [ngClass]="{ 'btn-primary': sortProperty == 'value' }"
+            (click)="sortBy('value')"
+          >
+            Word
+            <i *ngIf="sortProperty == 'value' && !sortReverse" class="icon icon-arrow-up"></i>
+            <i *ngIf="sortProperty == 'value' && sortReverse" class="icon icon-arrow-down"></i>
+          </button>
+        </div>
+        <!-- sort by occurence -->
+        <div class="col-2">
+          <button
+            id="sort-by-occurrence"
+            class="btn btn-sm btn-block"
+            [ngClass]="{ 'btn-primary': sortProperty == 'num_occurrences' }"
+            (click)="sortBy('num_occurrences')"
+          >
+            Occurrence
+            <i *ngIf="sortProperty == 'num_occurrences' && !sortReverse" class="icon icon-arrow-up"></i>
+            <i *ngIf="sortProperty == 'num_occurrences' && sortReverse" class="icon icon-arrow-down"></i>
+          </button>
         </div>
       </div>
     </div>
-    <br />
+    <!-- the list of words -->
     <app-word-component
       *ngFor="let uniqueWord of uniqueWords | orderBy:sortProperty:sortReverse"
       [uniqueWord]="uniqueWord"

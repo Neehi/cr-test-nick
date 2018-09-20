@@ -3,7 +3,7 @@ import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing'
 import { FormsModule } from '@angular/forms';
 
-import { of } from 'rxjs'
+import { of } from 'rxjs';
 
 import { OrderModule } from 'ngx-order-pipe';
 
@@ -74,14 +74,11 @@ describe('WordListComponent', () => {
       component.uniqueWords = someUniqueWords;
       fixture.detectChanges();
       const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector('.filter-panel')).toBeTruthy();
       expect(compiled.querySelector('.filter-panel .filter')).toBeTruthy();
-      expect(compiled.querySelector('.filter-panel #sort-by-name')).toBeTruthy();
-      expect(compiled.querySelector('.filter-panel #sort-by-name').textContent).toContain('Name');
-      expect(compiled.querySelector('.filter-panel #sort-by-occurrence')).toBeTruthy();
-      expect(compiled.querySelector('.filter-panel #sort-by-occurrence').textContent).toContain('Occurrence');
     }));
 
-    it('should call `filter` on button click', async(() => {
+    it('should call `filterBy` on button click', async(() => {
       component.uniqueWords = someUniqueWords;
       fixture.detectChanges();
       spyOn(component, 'filterBy');
@@ -91,13 +88,30 @@ describe('WordListComponent', () => {
         expect(component.filterBy).toHaveBeenCalled();
       })
     }));
+  });
+
+  describe('Sort panel', () => {
+    it('should not render sort panel if no unique words', async(() => {
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector('.sort-panel')).toBeFalsy();
+    }));
+
+    it('should render sort panel if has unique words', async(() => {
+      component.uniqueWords = someUniqueWords;
+      fixture.detectChanges();
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector('.sort-panel #sort-by-value')).toBeTruthy();
+      expect(compiled.querySelector('.sort-panel #sort-by-value').textContent).toContain('Word');
+      expect(compiled.querySelector('.sort-panel #sort-by-occurrence')).toBeTruthy();
+      expect(compiled.querySelector('.sort-panel #sort-by-occurrence').textContent).toContain('Occurrence');
+    }));
 
     it('should call `sortBy` on button click', async(() => {
       component.uniqueWords = someUniqueWords;
       fixture.detectChanges();
       spyOn(component, 'sortBy');
       const compiled = fixture.debugElement.nativeElement;
-      compiled.querySelector('#sort-by-name').click();
+      compiled.querySelector('#sort-by-value').click();
       compiled.querySelector('#sort-by-occurrence').click();
       fixture.whenStable().then(() => {
         expect(component.sortBy).toHaveBeenCalled(); //.exactly(2).times(); // TODO: Fix?

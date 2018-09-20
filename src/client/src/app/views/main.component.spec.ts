@@ -26,6 +26,6 @@ describe('MainComponent', () => {
 
   it('should render `Hello world!`', async(() => {
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('p').textContent).toContain('Hello world!');
+    expect(compiled.querySelector('p').textContent).toMatch('Loading...');
   }));
 });
