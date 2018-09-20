@@ -50,19 +50,66 @@ export class WordListComponent implements OnInit {
   }
 
   filterBy(filter: string) {
-    if (filter !== '') {
-      const filterTerms = filter.toLowerCase().split(/[ ,]+/);
-      this.uniqueWords = this._uniqueWords.filter(uniqueWord => {
-        for (var i=0; i < filterTerms.length; i++){
-          if (uniqueWord.value.toLowerCase().indexOf(filterTerms[i]) > -1) {
-            return true;
-          }
-        }
-        return false;
-      });
-    } else {
-      this.uniqueWords = Object.assign([], this._uniqueWords);
+    // Prep the terms
+    const filterTerms =
+      filter
+        .trim()
+        .split(/[ ,]+/)                     // split into separate terms
+        .filter(term => term.length)        // remove any empty strings
+        .map(term => (term.toLowerCase()))  // convert to lowercase
+        .sort((a, b) => b.length - a.length);
+
+    // Prep the list of words
+    const _uniqueWords =
+      this._uniqueWords
+        .map(uniqueWord => {  // should already be in lowercase but convert it just in case
+          return new UniqueWord(uniqueWord.value.toLowerCase(), uniqueWord.num_occurrences);
+        });
+
+    // If no terms then simply use the original list
+    if (!filterTerms.length) {
+      this.uniqueWords = Object.assign([], _uniqueWords);
+      return;
     }
+
+    this.uniqueWords =
+      _uniqueWords
+        .map(uniqueWord => {
+          // Get an initial list of matches
+          var matches = [];
+          filterTerms.forEach(term => {
+            for (i = 0; i < uniqueWord.value.length; i++) {
+              if (uniqueWord.value.substring(i, i + term.length) == term) {
+                matches.push({'start': i, 'end': i + term.length - 1});
+              }
+            }
+          });
+          matches.sort((a,b) => a.start - b.start);
+
+          // See if we have any matches
+          if (matches && matches.length) {
+            // Now build the highlighted string:
+            // - for each letter check if it is within a matched range
+            // - if char is in a matched range and not currently highlighted then open highlight tag
+            // - if char is not in a matched range and is currently hightlighted then close highlight tag
+            let highlightedWord = '';
+            let highlight = false;
+            for (var i=0; i < uniqueWord.value.length; i++) {
+              // Use map reduce to check if this position should be highlighted
+              if ((matches.reduce((acc, curr) => acc + ((curr.start <= i && curr.end >= i) ? 1 : 0), 0) > 0) != highlight) {
+                highlightedWord += '<' + (highlight ? '/' : '') + 'mark>';
+                highlight = !highlight;
+              }
+              highlightedWord += uniqueWord.value.charAt(i);
+            }
+            if (highlight) highlightedWord += '</mark>';
+            return new UniqueWord(
+              highlightedWord,
+              uniqueWord.num_occurrences
+            );
+          }
+        })
+        .filter(Boolean);
   }
 
   sortBy(property: string) {
@@ -85,7 +132,7 @@ export class WordListComponent implements OnInit {
       .addWords(sentence)
       .subscribe(data => {
         this.getWords();
-        this.modalState = 1; // Use ngx-toastr instead?
+        this.modalState = 1; // TODO: Use ngx-toastr instead?
       },
       error => {
         this.modalState = 2;

@@ -22,7 +22,7 @@ describe('WordListComponent', () => {
 
   beforeEach(async(() => {
     uniqueWordsServiceSpy = jasmine.createSpyObj('UniqueWordsService', ['getWords', 'addWords']);
-    (uniqueWordsServiceSpy.getWords as jasmine.Spy).and.returnValue(of(null));
+    (uniqueWordsServiceSpy.getWords as jasmine.Spy).and.returnValue(of([]));
     (uniqueWordsServiceSpy.addWords as jasmine.Spy).and.returnValue(of(null));
 
     TestBed.configureTestingModule({
@@ -135,35 +135,62 @@ describe('WordListComponent', () => {
   });
 
   describe('Filter', () => {
+    it('should not highlight on no filter', async(() => {
+      (component as any)._uniqueWords = someUniqueWords;
+      component.filterBy('');
+      fixture.detectChanges();
+      expect(component.uniqueWords[0].value).toEqual('test');
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector('app-word-component .panel-title').innerHTML).toBe('aaa');
+    }));
+
+    it('should highlight on filter', async(() => {
+      (component as any)._uniqueWords = someUniqueWords;
+      component.filterBy('test');
+      fixture.detectChanges();
+      expect(component.uniqueWords[0].value).toEqual('<mark>test</mark>');
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector('app-word-component .panel-title').innerHTML).toBe('<mark>test</mark>');
+    }));
+
+    it('should merge overlapping highlights', async(() => {
+      (component as any)._uniqueWords = someUniqueWords;
+      component.filterBy('aa');
+      fixture.detectChanges();
+      expect(component.uniqueWords[0].value).toEqual('<mark>aaa</mark>'); // {aa}a & a{aa}
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector('app-word-component .panel-title').innerHTML).toBe('<mark>aaa</mark>');
+    }));
+
     it('should filter on exact match', async(() => {
       (component as any)._uniqueWords = someUniqueWords;
       component.filterBy('test');
       fixture.detectChanges();
-      expect(component.uniqueWords).toEqual([new UniqueWord('test', 1)]);
+      expect(component.uniqueWords).toEqual([new UniqueWord('<mark>test</mark>', 1)]);
       const compiled = fixture.debugElement.nativeElement;
-      expect(compiled.querySelectorAll('app-word-component').length).toEqual(1);
-      expect(compiled.querySelector('app-word-component .panel-title').textContent).toContain('test');
+      expect(compiled.querySelectorAll('app-word-component .panel-title').length).toEqual(1);
+      expect(compiled.querySelector('app-word-component .panel-title').textContent).toBe('test');
     }));
 
     it('should filter on partial match', async(() => {
       (component as any)._uniqueWords = someUniqueWords;
       component.filterBy('es');
       fixture.detectChanges();
-      expect(component.uniqueWords).toEqual([new UniqueWord('test', 1)]);
+      expect(component.uniqueWords).toEqual([new UniqueWord('t<mark>es</mark>t', 1)]);
       const compiled = fixture.debugElement.nativeElement;
       expect(compiled.querySelectorAll('app-word-component').length).toEqual(1);
-      expect(compiled.querySelector('app-word-component .panel-title').textContent).toContain('test');
+      expect(compiled.querySelector('app-word-component .panel-title').textContent).toBe('test');
     }));
 
     it('should filter on multiple matches', async(() => {
       (component as any)._uniqueWords = someUniqueWords;
       component.filterBy('es aa');
       fixture.detectChanges();
-      expect(component.uniqueWords).toEqual(someUniqueWords);
+      expect(component.uniqueWords).toEqual([new UniqueWord('t<mark>es</mark>t', 1), new UniqueWord('<mark>aaa</mark>', 2)]);
       const compiled = fixture.debugElement.nativeElement;
-      expect(compiled.querySelectorAll('app-word-component').length).toEqual(2);
-      expect(compiled.querySelectorAll('app-word-component .panel-title')[0].textContent).toContain('AAA');
-      expect(compiled.querySelectorAll('app-word-component .panel-title')[1].textContent).toContain('test');
+      expect(compiled.querySelectorAll('app-word-component .panel-title').length).toEqual(2);
+      expect(compiled.querySelectorAll('app-word-component .panel-title')[0].textContent).toBe('aaa');
+      expect(compiled.querySelectorAll('app-word-component .panel-title')[1].textContent).toBe('test');
     }));
   });
 
