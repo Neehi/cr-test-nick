@@ -1,5 +1,16 @@
 @import '../../../assets/scss/variables';
 
+.empty .btn-primary,
+.modal .btn-primary,
+#add-words.btn-primary {
+  background-color: #e4b200;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
 .filter-panel {
   margin-bottom: 2em;
 }

@@ -21,8 +21,9 @@ describe('WordListComponent', () => {
   const someUniqueWords = [new UniqueWord('test', 1), new UniqueWord('AAA', 2)];
 
   beforeEach(async(() => {
-    uniqueWordsServiceSpy = jasmine.createSpyObj('UniqueWordsService', ['getWords']);
+    uniqueWordsServiceSpy = jasmine.createSpyObj('UniqueWordsService', ['getWords', 'addWords']);
     (uniqueWordsServiceSpy.getWords as jasmine.Spy).and.returnValue(of(null));
+    (uniqueWordsServiceSpy.addWords as jasmine.Spy).and.returnValue(of(null));
 
     TestBed.configureTestingModule({
       imports: [
@@ -197,6 +198,112 @@ describe('WordListComponent', () => {
       fixture.detectChanges();
       const compiled = fixture.debugElement.nativeElement;
       expect(compiled.querySelector('app-word-component .panel-title').textContent).toContain('AAA');
+    }));
+  });
+
+  describe('Add Words Modal', () => {
+    it('should be hidden by default', async(() => {
+      expect(component.isModalActive).toEqual(false);
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector('#add-words-modal.active')).toBeFalsy();
+    }));
+
+    it('should be shown when `isModalActive` is true', async(() => {
+      component.isModalActive = true;
+      fixture.detectChanges();
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector('#add-words-modal.active')).toBeTruthy();
+    }));
+
+    it('should be hidden when `isModalActive` is false', async(() => {
+      component.isModalActive = true;
+      fixture.detectChanges();
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector('#add-words-modal.active')).toBeTruthy();
+      component.isModalActive = false;
+      fixture.detectChanges();
+      expect(compiled.querySelector('#add-words-modal.active')).toBeFalsy();
+    }));
+
+    it('should be shown when `showModal` is called', async(() => {
+      component.showModal();
+      fixture.detectChanges();
+      expect(component.isModalActive).toEqual(true);
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector('#add-words-modal.active')).toBeTruthy();
+    }));
+
+    it('should be hidden when `closeModal` is called', async(() => {
+      component.showModal();
+      fixture.detectChanges();
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector('#add-words-modal.active')).toBeTruthy();
+      component.closeModal();
+      fixture.detectChanges();
+      expect(compiled.querySelector('#add-words-modal.active')).toBeFalsy();
+    }));
+
+    it('should show form with modal state 0', async(() => {
+      component.showModal();
+      fixture.detectChanges();
+      expect(component.modalState).toEqual(0);
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector('#add-words-modal.active form')).toBeTruthy();
+    }));
+
+    it('should show success message when modal state is 1', async(() => {
+      component.showModal();
+      component.modalState = 1;
+      fixture.detectChanges();
+      expect(component.modalState).toEqual(1);
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector('#add-words-modal.active form')).toBeFalsy();
+      expect(compiled.querySelector('#add-words-modal.active .modal-body p').textContent).toContain('Success!');
+    }));
+
+    it('should show error message when modal state is 2', async(() => {
+      component.showModal();
+      component.modalState = 2;
+      fixture.detectChanges();
+      expect(component.modalState).toEqual(2);
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector('#add-words-modal.active form')).toBeFalsy();
+      expect(compiled.querySelector('#add-words-modal.active .modal-body p').textContent).toContain('Oops!');
+    }));
+
+    it('should call `closeModal` on clicking overlay', async(() => {
+      component.showModal();
+      fixture.detectChanges();
+      spyOn(component, 'closeModal');
+      const compiled = fixture.debugElement.nativeElement;
+      compiled.querySelector('.modal-overlay').click();
+      fixture.whenStable().then(() => {
+        expect(component.closeModal).toHaveBeenCalled();
+      })
+    }));
+
+    it('should call `closeModal` on button click', async(() => {
+      component.showModal();
+      fixture.detectChanges();
+      spyOn(component, 'closeModal');
+      const compiled = fixture.debugElement.nativeElement;
+      compiled.querySelector('.modal-header button').click();
+      compiled.querySelector('.modal-footer button.btn-link').click();
+      fixture.whenStable().then(() => {
+        expect(component.closeModal).toHaveBeenCalled();
+      })
+    }));
+
+    it('should call `addWords` on button click', async(() => {
+      component.showModal();
+      fixture.detectChanges();
+      spyOn(component, 'addWords');
+      const compiled = fixture.debugElement.nativeElement;
+      compiled.querySelector('.modal-header button').click();
+      compiled.querySelector('.modal-footer button.btn-primary').click();
+      fixture.whenStable().then(() => {
+        expect(component.addWords).toHaveBeenCalled();
+      })
     }));
   });
 });

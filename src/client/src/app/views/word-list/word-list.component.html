@@ -1,9 +1,14 @@
 <section>
-  <div class="empty" *ngIf="!uniqueWords || uniqueWords?.length==0">
+  <div class="empty" *ngIf="!uniqueWords || uniqueWords?.length==0" aria-label="There are no words here yet">
     <div class="empty-icon">
       <i class="icon icon-3x icon-message"></i>
     </div>
     <p class="empty-title h3">There are no words here yet :(</p>
+    <div class="empty-action">
+      <button class="btn btn-primary btn-lg" aria-label="Add more words" (click)="showModal()">
+        Why not add some?!
+      </button>
+    </div>
   </div>
 
   <div *ngIf="uniqueWords && uniqueWords?.length != 0">
@@ -21,10 +26,12 @@
                   type="text"
                   class="form-input input-lg"
                   placeholder="Enter filter words..."
+                  aria-label="Enter filter words"
                 >
                 <button
                   class="btn btn-primary btn-lg input-group-btn"
                   type="submit"
+                  aria-label="Submit filter"
                 >
                   <i class="icon icon-search"></i>
                 </button>
@@ -32,18 +39,31 @@
             </form>
           </div>
         </div>
+        <!-- add words button -->
+        <div class="col-2">
+          <button
+            id="add-words"
+            class="btn btn-primary btn-action btn-lg tooltip float-right"
+            data-tooltip="add more words"
+            aria-label="Add more words"
+            (click)="showModal()"
+          >
+            <i class="icon icon-plus"></i>
+          </button>
+        </div>
       </div>
     </div>
 
     <div class="sort-panel container">
       <div class="columns">
-        <!-- sort by word -->
+        <!-- sort by value -->
         <div class="col-10">
           <button
             id="sort-by-value"
             class="btn btn-sm btn-block"
             [ngClass]="{ 'btn-primary': sortProperty == 'value' }"
             (click)="sortBy('value')"
+            aria-label="Sort list by word"
           >
             Word
             <i *ngIf="sortProperty == 'value' && !sortReverse" class="icon icon-arrow-up"></i>
@@ -57,6 +77,7 @@
             class="btn btn-sm btn-block"
             [ngClass]="{ 'btn-primary': sortProperty == 'num_occurrences' }"
             (click)="sortBy('num_occurrences')"
+            aria-label="Sort list by number of occurrences"
           >
             Occurrence
             <i *ngIf="sortProperty == 'num_occurrences' && !sortReverse" class="icon icon-arrow-up"></i>
@@ -72,3 +93,72 @@
     ></app-word-component>
   </div>
 </section>
+
+<!-- TODO: componentise and allow for dynamic content -->
+<!-- add new words modal -->
+<div id="add-words-modal" class="modal modal-sm" [ngClass]="{'active': isModalActive}">
+  <section class="modal-overlay" (click)="closeModal()" aria-label="Close"></section>
+  <!-- <ng-content select=".modal-overlay"></ng-content> -->
+  <div class="modal-container">
+    <!-- State 0: input -->
+    <div *ngIf="modalState==0">
+      <form _lpchecked="1" (ngSubmit)="addWords(sentence)">
+        <div class="modal-header">
+          <button class="btn btn-clear float-right" (click)="closeModal()" aria-label="Close"></button>
+          <div class="modal-title h5">Add new words</div>
+        </div>
+        <div class="modal-body">
+          <div class="content">
+              <div class="form-group">
+                <label class="form-label" for="add-words-input">Sentence:</label>
+                <input
+                  id="add-words-input"
+                  name="add-words-input"
+                  class="form-input"
+                  type="text"
+                  placeholder="Enter sentence here..."
+                  [(ngModel)]="sentence"
+                  aria-label="Enter sentence gere"
+                >
+              </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" type="submit" aria-label="Submit sentence">Submit</button>
+          <button class="btn btn-link" aria-label="Close" (click)="closeModal()">Close</button>
+        </div>
+      </form>
+    </div>
+    <!-- State 1: success -->
+    <div *ngIf="modalState==1"> <!-- TODO: User ngx-toastr for success? -->
+      <div class="modal-header">
+        <button class="btn btn-clear float-right" (click)="closeModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="content">
+          <p class="modal-title h5"><i class="icon icon-sm icon-check text-success"></i>&nbsp;&nbsp;Success!</p>
+          <p>Your words were successfully added!</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" aria-label="OK" (click)="closeModal()">OK</button>
+      </div>
+    </div>
+    <!-- State 2: error -->
+    <div *ngIf="modalState==2">
+      <div class="modal-header">
+        <button class="btn btn-clear float-right" (click)="closeModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="content">
+          <p class="modal-title h5"><i class="icon icon-sm icon-stop text-error"></i>&nbsp;&nbsp;Oops!</p>
+          <p>Looks like something went wrong. Please try again!</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" aria-label="OK" (click)="showModal()">OK</button>
+        <button class="btn btn-link" aria-label="Close" (click)="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
